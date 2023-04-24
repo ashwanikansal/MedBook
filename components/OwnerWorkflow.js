@@ -16,14 +16,14 @@ export default function OwnerWorkflow() {
                             is can be done using CLI.
                         </p>
                     </div>
-                    <div className="sm:w-32 sm:order-none order-first sm:h-32 h-20 w-20 sm:ml-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
+                    <div className="sm:w-32 sm:order-none order-first sm:h-32 h-20 w-20 sm:ml-10 inline-flex items-center justify-center rounded-full bg-blue-light text-indigo-500 flex-shrink-0">
                         <svg
                             fill="none"
                             stroke="currentColor"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="2"
-                            className="sm:w-16 sm:h-16 w-10 h-10"
+                            className="sm:w-16 sm:h-16 w-10 h-10 text-dark"
                             viewBox="0 0 24 24"
                         >
                             <circle cx="6" cy="6" r="3"></circle>
@@ -33,14 +33,14 @@ export default function OwnerWorkflow() {
                     </div>
                 </div>
                 <div className="flex items-center lg:w-3/5 mx-auto sm:flex-row flex-col">
-                    <div className="sm:w-32 sm:h-32 h-20 w-20 sm:mr-10 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
+                    <div className="sm:w-32 sm:h-32 h-20 w-20 sm:mr-10 inline-flex items-center justify-center rounded-full bg-blue-light text-indigo-500 flex-shrink-0">
                         <svg
                             fill="none"
                             stroke="currentColor"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="2"
-                            className="sm:w-16 sm:h-16 w-10 h-10"
+                            className="sm:w-16 sm:h-16 w-10 h-10 text-dark"
                             viewBox="0 0 24 24"
                         >
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>

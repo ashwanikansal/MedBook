@@ -51,7 +51,7 @@ export default function HospitalDashboard() {
             </Head>
             <Header />
             <div className="container">
-                <div className="py-4 px-3 font-bold text-4xl ml-12">
+                <div className="py-4 px-3 font-bold text-4xl ml-12 text-green">
                     Hospital Dashboard
                     {isWeb3Enabled ? (
                         <div className="badge badge-primary ml-4">

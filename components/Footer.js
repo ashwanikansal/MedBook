@@ -175,3 +175,25 @@ export default function Footer() {
         </div>
     )
 }
+
+// export default function Footer() {
+//         return (
+//             <div>
+//                 <footer className=" pt-10 pb-8 text-light bg-light border-t border-grey">
+//                     <div className="w-0.25em ">
+//                         <h1 className="text-dark text-center text-2xl font-bold"> OUR TEAM</h1>
+//                         </div>
+//                         <div className=" pt-10 border-blue flex w-90">
+//                             <div className=" flex flex-col">
+//                             <img src="home.png" width="20%" border-radius="0em" />
+//                             <h4 className="text-dark">Ashwami kansal</h4>
+//                             </div>
+//                             {/* < className="flex flex-col px-5">  */}
+//                             <img src="logo.png" width="20%"/>
+                           
+//                             {/* <img src="" */}
+//                         </div>
+//                         </footer>
+//                         </div>
+//         )
+// }

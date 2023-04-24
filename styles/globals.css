@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
+/* :root{ */
   /* colors */
-  --primary: #0d7e78;
+  /* --primary: #0d7e78;
   --primary-light: #2ffcd5;
   --secondary: #ff6060;
   --secondary-light: #ffdeee; 
@@ -13,7 +13,7 @@
   --light: #ffffff;
   --dark: #000000;
   --dark-light: #383838;
-}
+} */
 
 html,
 body {
