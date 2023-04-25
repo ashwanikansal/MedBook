@@ -15,15 +15,19 @@ export default function Home() {
       </Head>
       <Navbar/>
       {/* hero section */}
-      <div className="hero max-width grid grid-cols-2 h-[80vh] rounded-2xl overflow-hidden">
-        <div className="hero-left bg-slate-400">
-          <h1 className='pt-4 text-5xl font-medium'> 
-            Get your medical history 
-            stored on blockchain with us 
+      <div className="hero max-width grid grid-cols-5 h-[80vh] rounded-3xl">
+        <div className="hero-left bg-texture col-span-3 px-10 rounded-l-3xl flex flex-col justify-center">
+          <h1 className='text-5xl font-medium uppercase mb-2'> 
+            Get your <br />
+            medical history <br />
+            stored on blockchain
           </h1>
-          <p>Access it from anywhere and anytime. Trusted by Government authorities</p>
+          <p className='mt-2'>Access it from anywhere and anytime. 
+          <br /> Trusted by Government authorities.</p>
         </div>
-        <div className="hero-right bg-slate-600">Image</div>
+        <div className="hero-right bg-slate-600 col-span-2">
+          <img src="/home.png" alt="MedBook" />
+        </div>
       </div>
 
       {/* login container */}

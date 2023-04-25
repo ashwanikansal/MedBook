@@ -16,18 +16,20 @@ const Navbar = () => {
 
       <ul className="lg:w-3/12 md:w-4/12 flex justify-between">
         <li className="mx-2">
-            <Link href="/">Home</Link>
+          <Link href="/">Home</Link>
         </li>
         <li className="mx-2">
-            <Link href="/about">About</Link>
+          <Link href="/about">About</Link>
         </li>
         <li className="mx-2">
-            <Link href="/services">Services</Link>
+          <Link href="/services">Services</Link>
         </li>
       </ul>
 
       <div className="login-btn">
-        <button>Login</button>
+        <button className="rounded-full bg-pink-500 text-white py-1 px-4">
+          Login
+        </button>
       </div>
     </nav>
   );
