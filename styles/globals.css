@@ -2,42 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root{ */
-  /* colors */
-  /* --primary: #0d7e78;
-  --primary-light: #2ffcd5;
-  --secondary: #ff6060;
-  --secondary-light: #ffdeee; 
-  --ternary: #6f8eff;
-  --ternary-light: #bde7ff;
-  --light: #ffffff;
-  --dark: #000000;
-  --dark-light: #383838;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 } */
 
-html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.max-width{
+  width: 100%;
+  padding-left: 5rem;
+  padding-right: 5rem;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  /* html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  } */
-}
+/* @media screen() {
+  
+} */
