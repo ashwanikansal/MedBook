@@ -27,7 +27,7 @@ const Navbar = () => {
       </ul>
 
       <div className="login-btn">
-        <button className="transition ease-linear rounded-full bg-pink text-light py-1 px-4 hover:drop-shadow-xl ">
+        <button className="transition ease-linear rounded-full bg-pink text-light py-1 px-4 hover:drop-shadow-xl">
           Login
         </button>
       </div>
