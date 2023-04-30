@@ -15,11 +15,12 @@
     --background-end-rgb: 0, 0, 0;
   }
 } */
-/* @layer base{
-  html{
-    font-family: ;
+@layer base {
+  html {
+    font-family: Proxima Nova, system-ui, sans-serif;
   }
-} */
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -32,10 +33,20 @@ body {
 
 .max-width{
   width: 100%;
-  padding-left: 5rem;
-  padding-right: 5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
-/* @media screen() {
-  
-} */
+@media screen and (min-width: 786px) {
+  .max-width{
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .max-width{
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
+}

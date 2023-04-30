@@ -32,7 +32,10 @@ module.exports = {
       },
       light: "#ffffff",
       dark: "#000000",
-      gray: "#383838",
+      gray: {
+        DEFAULT: "#4b5563",
+        light: "#d1d5db"
+      }
     },
   },
   plugins: [],

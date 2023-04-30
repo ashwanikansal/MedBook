@@ -1,8 +1,9 @@
 import Link from "next/link";
+import Button from "./button";
 
 const Navbar = () => {
   return (
-    <nav className="flex py-4 max-width justify-between items-center">
+    <nav className="max-width justify-center flex py-4 md:justify-between items-center scroll-smooth">
       <Link
         href="/"
         className="relative flex items-center h-full font-black leading-none"
@@ -14,25 +15,23 @@ const Navbar = () => {
         </span>
       </Link>
 
-      <ul className="lg:w-3/12 md:w-4/12 flex justify-between">
-        <li className="mx-2 hover:text-green font-medium">
+      <ul className="hidden md:flex md:justify-between md:w-4/12 lg:w-3/12">
+        <li className="mx-1 lg:mx-2 hover:text-green transition-all font-medium">
           <Link href="/">Home</Link>
         </li>
-        <li className="mx-2 hover:text-green font-medium">
+        <li className="mx-1 lg:mx-2 hover:text-green transition-all font-medium">
           <Link href="/about">About</Link>
         </li>
-        <li className="mx-2 hover:text-green font-medium">
-          <Link href="/services">Services</Link>
+        <li className="mx-1 lg:mx-2 hover:text-green transition-all font-medium">
+          <Link href="#services">Services</Link>
         </li>
       </ul>
 
-      <div className="login-btn">
-        <button className="transition ease-linear rounded-full bg-pink text-light py-1 px-4 hover:drop-shadow-xl">
-          Login
-        </button>
+      <div className="hidden md:block login-btn">
+        <Button name="Login" link="#login-container"/>
       </div>
     </nav>
-  );
-};
+  )
+}
 
 export default Navbar;
