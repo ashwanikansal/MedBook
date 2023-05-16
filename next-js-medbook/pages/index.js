@@ -1,10 +1,7 @@
 import Button from "@/components/button";
-import Link from "next/link";
 import Head from "next/head";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-
-// const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (
@@ -44,9 +41,9 @@ export default function Home() {
                   alt=""
                 />
               </div>
-              <div className="p-5 text-center bg-pink-light">
+              <div className="p-5 flex justify-center flex-col items-center bg-pink-light">
                 <h5 className="mb-5 text-xl font-medium text-dark">
-                  Hospital Login & Register
+                  Hospital Login
                 </h5>
                 <Button name="Click here" link="/loginPage"/>
               </div>
@@ -61,11 +58,11 @@ export default function Home() {
                   alt=""
                 />
               </div>
-              <div className="p-5 text-center bg-pink-light">
+              <div className="p-5 flex justify-center flex-col items-center bg-pink-light">
                 <h5 className="mb-5 text-xl font-medium text-dark">
                   Doctor Login
                 </h5>
-                <Button name="Click here" link="/loginPage"/>
+                <Button name="Click here" link="/"/>
               </div>
             </div>
 
@@ -78,9 +75,9 @@ export default function Home() {
                   alt=""
                 />
               </div>
-              <div className="p-5 text-center bg-pink-light">
+              <div className="p-5 flex justify-center flex-col items-center bg-pink-light">
                 <h5 className="mb-5 text-xl font-medium text-dark">
-                  Patient Login
+                  Patient Login & register
                 </h5>
                 <Button name="Click here" link="/loginPage"/>
               </div>
