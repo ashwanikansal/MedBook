@@ -97,6 +97,12 @@ const OwnerDashboard = () => {
         "Doctor Details Successfully Added. You can now add more doctors",
       position: "bottomL",
     });
+    console.log("doctor address: ", doctorAddressToAddTo);
+    console.log("doctor name: ", doctorName);
+    console.log("doctor registration id: ", doctorRegistrationId);
+    console.log("date of registration: ", dateInUnix(new Date()));
+    console.log("doctor specialization: ", doctorSpecialization);
+    console.log("doctor hospital address: ", doctorHospitalAddress);
     setShowAddDoctorModal(false);
     onCloseDoctorModal && onCloseDoctorModal(); //closing the modal on success
   };

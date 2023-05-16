@@ -62,7 +62,7 @@ export default function Home() {
                 <h5 className="mb-5 text-xl font-medium text-dark">
                   Doctor Login
                 </h5>
-                <Button name="Click here" link="/"/>
+                <Button name="Click here" link="/doctorDashboard"/>
               </div>
             </div>
 
