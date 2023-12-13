@@ -14,8 +14,14 @@ const networkConfig = {
 }
 
 const developmentChains = ["hardhat", "localhost"]
+const CATEGORY = 0
+const IPFS_HASH = ""       //The IPFS hash generated after uploading the file of the patient to the pinata IPFS node. 
+const VERIFICATION_BLOCK_CONFIRMATIONS = 6
 
 module.exports = {
     networkConfig,
-    developmentChains
+    developmentChains,
+    CATEGORY,
+    IPFS_HASH,
+    VERIFICATION_BLOCK_CONFIRMATIONS,
 }

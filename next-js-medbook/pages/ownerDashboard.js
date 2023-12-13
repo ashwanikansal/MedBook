@@ -1,52 +1,60 @@
-import Head from "next/head";
-import { useMoralis, useWeb3Contract } from "react-moralis";
-import { ConnectButton, useNotification, Modal, Input } from "web3uikit";
-import Header from "../components/header";
-import { useState } from "react";
-import PatientMedicalRecordSystemAbi from "../constants/PatientMedicalRecordSystem.json";
-import networkMapping from "../constants/networkMapping.json";
-import ConnectModal from "@/components/connectModal";
-import Button from "@/components/button";
-import dateInUnix from "../utils/dateInUnix";
+import Head from "next/head"
+import { useMoralis, useWeb3Contract } from "react-moralis"
+import { ConnectButton, useNotification, Modal, Input } from "web3uikit"
+import Header from "../components/header"
+import { useState, useEffect } from "react"
+import PatientMedicalRecordSystemAbi from "../constants/PatientMedicalRecordSystem.json"
+import networkMapping from "../constants/networkMapping.json"
+import ConnectModal from "@/components/connectModal"
+import Button from "@/components/button"
+import dateInUnix from "../utils/dateInUnix"
 
 const OwnerDashboard = () => {
-  const dispatch = useNotification();
-  const { runContractFunction } = useWeb3Contract();
-  const { isWeb3Enabled, chainId: chainHexId, account } = useMoralis();
-  const [isOwner, setIsOwner] = useState(false);
-//   const [showAddHospitalModal, setShowAddHospitalModal] = useState(false);
-  const [showAddDoctorModal, setShowAddDoctorModal] = useState(false);
-  const [cancelDisabled, setCancelDisabled] = useState(false);
-  const [okDisabled, setOkDisabled] = useState(false);
+  const dispatch = useNotification()
+  const { runContractFunction } = useWeb3Contract()
+  const { isWeb3Enabled, chainId: chainHexId, account } = useMoralis()
+  const [isOwner, setIsOwner] = useState(false)
+  const [showAddHospitalModal, setShowAddHospitalModal] = useState(false)
+  const [showAddDoctorModal, setShowAddDoctorModal] = useState(false)
+  const [cancelDisabled, setCancelDisabled] = useState(false)
+  const [okDisabled, setOkDisabled] = useState(false)
 
-  const [doctorAddressToAddTo, setDoctorAddressToAddTo] = useState("");
-  const [doctorName, setDoctorName] = useState("");
-  const [doctorRegistrationId, setDoctorRegistrationId] = useState("");
-  const [doctorSpecialization, setDoctorSpecialization] = useState("");
-  const [doctorHospitalAddress, setDoctorHospitalAddress] = useState("");
+  const [data, setData] = useState([])
 
-//   const [hospitalAddressToAddTo, setHospitalAddressToAddTo] = useState("");
-//   const [hospitalName, setHospitalName] = useState("");
-//   const [hospitalRegistrationId, setHospitalRegistrationId] = useState("");
-//   const [hospitalEmail, setHospitalEmail] = useState("");
-//   const [hospitalPhoneNumber, setHospitalPhoneNumber] = useState("");
+  const doctorInitialState = {
+    address: "",
+    name: "",
+    registrationId: "",
+    specialization: "",
+    hospitalAddress: "",
+    patients: [],
+  }
 
-  const chainId = chainHexId ? parseInt(chainHexId).toString() : "31337";
+  const hospitalInitialState = {
+    address: "",
+    name: "",
+    registrationId: "",
+    email: "",
+    phone: "",
+    doctors: [],
+  }
+
+  const [hospital, setHospital] = useState(hospitalInitialState)
+  const [doctor, setDoctor] = useState(doctorInitialState)
+
+  const chainId = chainHexId ? parseInt(chainHexId).toString() : "31337"
   const medicalRecordSystemAddress =
-    networkMapping[chainId].PatientMedicalRecordSystem[0];
+    networkMapping[chainId].PatientMedicalRecordSystem[0]
 
   const { runContractFunction: getOwner } = useWeb3Contract({
     abi: PatientMedicalRecordSystemAbi,
     contractAddress: medicalRecordSystemAddress,
     functionName: "getOwner",
     params: {},
-  });
+  })
 
   const handleVerificationClick = async () => {
-    const contractOwner = await getOwner();
-    // console.log(contractOwner)
-    // console.log(account)
-    // console.log(contractOwner === account)
+    const contractOwner = await getOwner()
     if (
       contractOwner.toString().toLowerCase() ===
       account.toString().toLowerCase()
@@ -57,8 +65,8 @@ const OwnerDashboard = () => {
         message:
           "Ownership Successfully Verified. You can now perform following functions",
         position: "bottomL",
-      });
-      setIsOwner(true);
+      })
+      setIsOwner(true)
     } else {
       dispatch({
         type: "error",
@@ -66,80 +74,135 @@ const OwnerDashboard = () => {
         message: `As per our records ${contractOwner} is the owner of this smart contract.`,
         position: "bottomL",
         isClosing: false,
-      });
+      })
     }
-  };
+  }
   const onCloseDoctorModal = () => {
-    setShowAddDoctorModal(false);
-  };
-//   const onCloseHospitalModal = () => {
-//     setShowAddHospitalModal(false);
-//   };
+    setShowAddDoctorModal(false)
+  }
+  const onCloseHospitalModal = () => {
+    setShowAddHospitalModal(false)
+  }
 
   const handleAddDoctorClick = async () => {
-    // console.log("Add Doctor Clicked")
-    setShowAddDoctorModal(true);
-  };
+    setShowAddDoctorModal(true)
+  }
 
-//   const handleAddHospitalClick = async () => {
-//     // console.log("Add Hospital Clicked")
-//     setShowAddHospitalModal(true);
-//   };
+  const handleAddHospitalClick = async () => {
+    setShowAddHospitalModal(true)
+  }
 
   //Add Doctor
 
-  const handleAddDoctorSuccess = async (tx) => {
-    await tx.wait(1);
-    dispatch({
-      type: "success",
-      title: "Transaction Successful",
-      message:
-        "Doctor Details Successfully Added. You can now add more doctors",
-      position: "bottomL",
-    });
-    console.log("doctor address: ", doctorAddressToAddTo);
-    console.log("doctor name: ", doctorName);
-    console.log("doctor registration id: ", doctorRegistrationId);
-    console.log("date of registration: ", dateInUnix(new Date()));
-    console.log("doctor specialization: ", doctorSpecialization);
-    console.log("doctor hospital address: ", doctorHospitalAddress);
-    setShowAddDoctorModal(false);
-    onCloseDoctorModal && onCloseDoctorModal(); //closing the modal on success
-  };
+  // const handleAddDoctorSuccess = async (tx) => {
+  //   await tx.wait(1)
+  //   dispatch({
+  //     type: "success",
+  //     title: "Transaction Successful",
+  //     message:
+  //       "Doctor Details Successfully Added. You can now add more doctors",
+  //     position: "bottomL",
+  //   })
+  //   console.log("doctor address: ", doctorAddressToAddTo)
+  //   console.log("doctor name: ", doctorName)
+  //   console.log("doctor registration id: ", doctorRegistrationId)
+  //   console.log("date of registration: ", dateInUnix(new Date()))
+  //   console.log("doctor specialization: ", doctorSpecialization)
+  //   console.log("doctor hospital address: ", doctorHospitalAddress)
+  //   setShowAddDoctorModal(false)
+  //   onCloseDoctorModal && onCloseDoctorModal() //closing the modal on success
+  // }
 
-  const initiateAddDoctorTransaction = async () => {
-    console.log("Initiate Add Doctor Transaction");
-    setCancelDisabled(true);
-    setOkDisabled(true);
+  // const initiateAddDoctorTransaction = async () => {
+  //   console.log("Initiate Add Doctor Transaction")
+  //   setCancelDisabled(true)
+  //   setOkDisabled(true)
 
-    const addDoctorDetailsOptions = {
-      abi: PatientMedicalRecordSystemAbi,
-      contractAddress: medicalRecordSystemAddress,
-      functionName: "addDoctorDetails",
-      params: {
-        //parameters of this function
-        _doctorAddress: doctorAddressToAddTo,
-        _name: doctorName,
-        _doctorRegistrationId: doctorRegistrationId,
-        _dateOfRegistration: dateInUnix(new Date()),
-        _specialization: doctorSpecialization,
-        _hospitalAddress: doctorHospitalAddress,
-      },
-    };
+  //   const addDoctorDetailsOptions = {
+  //     abi: PatientMedicalRecordSystemAbi,
+  //     contractAddress: medicalRecordSystemAddress,
+  //     functionName: "addDoctorDetails",
+  //     params: {
+  //       //parameters of this function
+  //       _doctorAddress: doctorAddressToAddTo,
+  //       _name: doctorName,
+  //       _doctorRegistrationId: doctorRegistrationId,
+  //       _dateOfRegistration: dateInUnix(new Date()),
+  //       _specialization: doctorSpecialization,
+  //       _hospitalAddress: doctorHospitalAddress,
+  //     },
+  //   }
 
-    await runContractFunction({
-      params: addDoctorDetailsOptions,
-      onError: (error) => {
-        console.log("Error while calling registerPatient function", error);
-      },
-      onSuccess: handleAddDoctorSuccess,
-    });
-    setCancelDisabled(false);
-    setOkDisabled(false);
-  };
+  //   await runContractFunction({
+  //     params: addDoctorDetailsOptions,
+  //     onError: (error) => {
+  //       console.log("Error while calling registerPatient function", error)
+  //     },
+  //     onSuccess: handleAddDoctorSuccess,
+  //   })
+  //   setCancelDisabled(false)
+  //   setOkDisabled(false)
+  // }
+
+  const initiateAddDoctorTransaction = () => {
+    if (
+      !doctor.address ||
+      !doctor.name ||
+      !doctor.registrationId ||
+      !doctor.specialization ||
+      !doctor.hospitalAddress
+    ) {
+      alert("Fill all the required fields")
+      return
+    }
+    setCancelDisabled(true)
+    setOkDisabled(true)
+    const temp = data
+    if (!temp.find((h) => h.address === doctor.hospitalAddress)) {
+      alert("Hospital ID doesn't Exist!")
+    } else {
+      temp
+        .find((h) => h.address === doctor.hospitalAddress)
+        .doctors.push(doctor)
+      localStorage.setItem("data", JSON.stringify(temp))
+      setData(temp)
+      alert("Doctor is added successfully!")
+      setDoctor(doctorInitialState)
+    }
+    setCancelDisabled(false)
+    setOkDisabled(false)
+    onCloseDoctorModal()
+  }
 
   //Add Hospital
-  /* ------------ HERE WE WILL WRITE THE CODE FOR ADDING HOSPITALS-------------------------- */
+  const initiateAddHospitalTransaction = () => {
+    if (
+      !hospital.address ||
+      !hospital.name ||
+      !hospital.registrationId ||
+      !hospital.email ||
+      !hospital.phone
+    ) {
+      alert("Fill all the required fields")
+      return
+    }
+    setCancelDisabled(true)
+    setOkDisabled(true)
+    localStorage.setItem("data", JSON.stringify(data.concat(hospital)))
+    setData((prev) => [...prev, hospital])
+    setHospital(hospitalInitialState)
+    alert("Hospital is added successfully!")
+    setCancelDisabled(false)
+    setOkDisabled(false)
+    onCloseHospitalModal()
+  }
+
+  useEffect(() => {
+    const storageData = localStorage.getItem("data")
+    if (storageData) {
+      setData(JSON.parse(storageData))
+    }
+  }, [])
 
   return (
     <>
@@ -162,8 +225,9 @@ const OwnerDashboard = () => {
             label="Enter Doctor's account address"
             name="Doctor Account Address"
             type="text"
+            value={doctor.address}
             onChange={(event) => {
-              setDoctorAddressToAddTo(event.target.value);
+              setDoctor({ ...doctor, address: event.target.value })
             }}
             width="full"
             validation={{
@@ -176,8 +240,9 @@ const OwnerDashboard = () => {
             label="Enter Doctor's name"
             name="Doctor Name"
             type="text"
+            value={doctor.name}
             onChange={(event) => {
-              setDoctorName(event.target.value);
+              setDoctor({ ...doctor, name: event.target.value })
             }}
             width="full"
             validation={{
@@ -190,8 +255,9 @@ const OwnerDashboard = () => {
             label="Enter Doctor's Registration Id"
             name="Doctor Registration Id"
             type="text"
+            value={doctor.registrationId}
             onChange={(event) => {
-              setDoctorRegistrationId(event.target.value);
+              setDoctor({ ...doctor, registrationId: event.target.value })
             }}
             width="full"
             validation={{
@@ -204,8 +270,9 @@ const OwnerDashboard = () => {
             label="Enter Doctor's Specialization"
             name="Doctor Specialization"
             type="text"
+            value={doctor.specialization}
             onChange={(event) => {
-              setDoctorSpecialization(event.target.value);
+              setDoctor({ ...doctor, specialization: event.target.value })
             }}
             width="full"
             validation={{
@@ -218,8 +285,9 @@ const OwnerDashboard = () => {
             label="Enter Doctor's Hospital Account Address"
             name="Doctor Hospital Address"
             type="text"
+            value={doctor.hospitalAddress}
             onChange={(event) => {
-              setDoctorHospitalAddress(event.target.value);
+              setDoctor({ ...doctor, hospitalAddress: event.target.value })
             }}
             width="full"
             validation={{
@@ -228,86 +296,91 @@ const OwnerDashboard = () => {
           />
         </div>
       </Modal>
-      {/* <Modal
-            isVisible={showAddHospitalModal}
-            onCancel={onCloseHospitalModal}
-            onCloseButtonPressed={onCloseHospitalModal}
-            onOk={initiateAddHospitalTransaction}
-            isCancelDisabled={cancelDisabled}
-            isOkDisabled={okDisabled}
-            width="63vw"
-          >
-            <div className="mb-5">
-              <Input
-                label="Enter Hospital's account address"
-                name="Hospital Account Address"
-                type="text"
-                onChange={(event) => {
-                  setHospitalAddressToAddTo(event.target.value);
-                }}
-                width="full"
-                validation={{
-                  required: true,
-                }}
-              />
-            </div>
-            <div className="mb-5">
-              <Input
-                label="Enter Hospital's name"
-                name="Hospital Name"
-                type="text"
-                onChange={(event) => {
-                  setHospitalName(event.target.value);
-                }}
-                width="full"
-                validation={{
-                  required: true,
-                }}
-              />
-            </div>
-            <div className="mb-5">
-              <Input
-                label="Enter Hospital's Registration Id"
-                name="Hospital Registration Id"
-                type="text"
-                onChange={(event) => {
-                  setHospitalRegistrationId(event.target.value);
-                }}
-                width="full"
-                validation={{
-                  required: true,
-                }}
-              />
-            </div>
-            <div className="mb-5">
-              <Input
-                label="Enter Hospital's Email"
-                name="Hospital Email"
-                type="text"
-                onChange={(event) => {
-                  setHospitalEmail(event.target.value);
-                }}
-                width="full"
-                validation={{
-                  required: true,
-                }}
-              />
-            </div>
-            <div className="mb-5">
-              <Input
-                label="Enter Hospital's Phone Number"
-                name="Hospital Phone Number"
-                type="text"
-                onChange={(event) => {
-                  setHospitalPhoneNumber(event.target.value);
-                }}
-                width="full"
-                validation={{
-                  required: true,
-                }}
-              />
-            </div>
-          </Modal> */}
+      <Modal
+        isVisible={showAddHospitalModal}
+        onCancel={onCloseHospitalModal}
+        onCloseButtonPressed={onCloseHospitalModal}
+        onOk={initiateAddHospitalTransaction}
+        isCancelDisabled={cancelDisabled}
+        isOkDisabled={okDisabled}
+        width="63vw"
+      >
+        <div className="mb-5">
+          <Input
+            label="Enter Hospital's account address"
+            name="Hospital Account Address"
+            type="text"
+            value={hospital.address}
+            onChange={(event) => {
+              setHospital({ ...hospital, address: event.target.value })
+            }}
+            width="full"
+            validation={{
+              required: true,
+            }}
+          />
+        </div>
+        <div className="mb-5">
+          <Input
+            label="Enter Hospital's name"
+            name="Hospital Name"
+            type="text"
+            value={hospital.name}
+            onChange={(event) => {
+              setHospital({ ...hospital, name: event.target.value })
+            }}
+            width="full"
+            validation={{
+              required: true,
+            }}
+          />
+        </div>
+        <div className="mb-5">
+          <Input
+            label="Enter Hospital's Registration Id"
+            name="Hospital Registration Id"
+            type="text"
+            value={hospital.registrationId}
+            onChange={(event) => {
+              setHospital({ ...hospital, registrationId: event.target.value })
+            }}
+            width="full"
+            validation={{
+              required: true,
+            }}
+          />
+        </div>
+        <div className="mb-5">
+          <Input
+            label="Enter Hospital's Email"
+            name="Hospital Email"
+            type="text"
+            value={hospital.email}
+            onChange={(event) => {
+              setHospital({ ...hospital, email: event.target.value })
+            }}
+            width="full"
+            validation={{
+              required: true,
+            }}
+          />
+        </div>
+        <div className="mb-5">
+          <Input
+            label="Enter Hospital's Phone Number"
+            name="Hospital Phone Number"
+            type="text"
+            value={hospital.phone}
+            onChange={(event) => {
+              setHospital({ ...hospital, phone: event.target.value })
+            }}
+            width="full"
+            validation={{
+              required: true,
+            }}
+          />
+        </div>
+      </Modal>
       {!isWeb3Enabled ? (
         <ConnectModal />
       ) : (
@@ -323,7 +396,7 @@ const OwnerDashboard = () => {
               </button>
               <button
                 className="btn btn-secondary mr-5"
-                // onClick={handleAddHospitalClick}
+                onClick={handleAddHospitalClick}
               >
                 <Button name="Add a Hospital" link="/ownerDashboard" />
               </button>
@@ -339,10 +412,10 @@ const OwnerDashboard = () => {
       )}
       ;
     </>
-  );
-};
+  )
+}
 
-export default OwnerDashboard;
+export default OwnerDashboard
 
 /* 
                         1. Possibly show the list of all the doctors registered in the system. (show the list of details of all the doctors)

@@ -8,3 +8,21 @@ function generateGUID() {
 // Example usage:
 const myGUID = generateGUID();
 console.log(myGUID); // Outputs a random GUID like "de305d54-75b4-431b-adb2-eb6b9e546014"
+
+// hospital
+
+0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+Apollo hospitals
+001234567890X
+apollohspt@gmail.com
+9998899955
+
+// doctor
+
+0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc
+Dr. Muskan Arora
+000123456789X
+Heart's Specialist
+0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+
+// patient

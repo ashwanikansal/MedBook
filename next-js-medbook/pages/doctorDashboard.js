@@ -1,46 +1,75 @@
-import Head from "next/head";
-import { useMoralis } from "react-moralis";
-import { ConnectButton, Loading } from "web3uikit";
-import Header from "../components/header";
-import networkMapping from "../constants/networkMapping.json";
-import ConnectModal from "@/components/connectModal";
-import { useEffect, useState } from "react";
-import DoctorProfile from "@/components/doctorProfile";
+import Head from "next/head"
+import { useMoralis } from "react-moralis"
+import { ConnectButton, Loading } from "web3uikit"
+import Header from "../components/header"
+import networkMapping from "../constants/networkMapping.json"
+import ConnectModal from "@/components/connectModal"
+import { useEffect, useState } from "react"
+import DoctorProfile from "@/components/doctorProfile"
 
-const addedDoctors = [
-  {
-    "doctorAddress":  "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
-    "name":  "Dr. Muskan Arora",
-    "doctorRegistrationId":  "yashika2023",
-    "dateOfRegistration":  "1684217805",
-    "specialization":  "Heart Specialist",
-    "hospitalAddress":  "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-  },
-  {
-    "doctorAddress":  "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
-    "name":  "Dr. Deeptika",
-    "doctorRegistrationId":  "deepverma2023",
-    "dateOfRegistration":  "1684217805",
-    "specialization":  "Eye Specialist",
-    "hospitalAddress":  "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-  }
-]
+// const doctors = [
+//   {
+//     "address":  "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+//     "name":  "Dr. Muskan Arora",
+//     "registrationId":  "yashika2023",
+//     "dateOfRegistration":  "1684217805",
+//     "specialization":  "Heart Specialist",
+//     "hospitalAddress":  "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+//     "patients":[
+//       {
+//         patientAddress: "dfhejrakoweWER",
+//         patientname: "kilua",
+//         visited: "24432423",
+//       }
+//     ]
+//   },
+//   {
+//     "address":  "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+//     "name":  "Dr. Deeptika",
+//     "registrationId":  "deepverma2023",
+//     "dateOfRegistration":  "1684217805",
+//     "specialization":  "Eye Specialist",
+//     "hospitalAddress":  "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+//     "patients":[
+//       {
+//         "patientAddress": "dfhejrakoweWER",
+//         "patientName": "kilua",
+//         "visited": "24432423",
+//       }
+//     ]
+//   }
+// ]
 export default function DoctorDashboard() {
-  const { isWeb3Enabled, chainId: chainHexId, account } = useMoralis();
-  const [doctorProfileFound, setDoctorProfileFound] = useState(false);
-  const [doctorAddresses, setDoctorAddresses] = useState([]);
+  const { isWeb3Enabled, chainId: chainHexId, account } = useMoralis()
+  const [doctorProfileFound, setDoctorProfileFound] = useState(false)
+  const [data, setData] = useState([])
+  const [doctors, setDoctors] = useState([])
 
-  const chainId = chainHexId ? parseInt(chainHexId).toString() : "31337";
+  const chainId = chainHexId ? parseInt(chainHexId).toString() : "31337"
   // console.log(chainId)
   const patientMedicalRecordSystemAddress =
-    networkMapping[chainId].PatientMedicalRecordSystem[0];
+    networkMapping[chainId].PatientMedicalRecordSystem[0]
 
-    useEffect(() => {
-      if(isWeb3Enabled){
-        const isValueFound = addedDoctors.some(doctor => doctor.doctorAddress.toLowerCase() == account.toLowerCase());
-        setDoctorProfileFound(isValueFound);
+  useEffect(() => {
+    if (data.length === 0) {
+      const storageData = localStorage.getItem("data")
+      if (storageData) {
+        const parsed = JSON.parse(storageData)
+        setData(parsed)
+        const allDoctors = parsed.reduce((accumulator, hospital) => {
+          return accumulator.concat(hospital.doctors);
+        }, []);
+        setDoctors(allDoctors);
       }
-    }, [isWeb3Enabled])
+    }
+    if (isWeb3Enabled) {
+      console.log(doctors)
+      const isValueFound = doctors.some(
+        (doctor) => doctor.address.toLowerCase() == account.toLowerCase()
+      )
+      setDoctorProfileFound(isValueFound)
+    }
+  }, [isWeb3Enabled, data])
 
   return (
     <>
@@ -54,7 +83,7 @@ export default function DoctorDashboard() {
       ) : (
         <>
           <Header heading="Doctor Dashboard" />
-          {!addedDoctors ? (
+          {!doctors ? (
             <div
               style={{
                 backgroundColor: "#ECECFE",
@@ -73,29 +102,31 @@ export default function DoctorDashboard() {
               />
             </div>
           ) : doctorProfileFound ? (
-            addedDoctors.map((doctor) => {
-              if (doctor.doctorAddress.toLowerCase() === account.toLowerCase()) {
+            doctors.map((doctor) => {
+              if (doctor.address.toLowerCase() === account.toLowerCase()) {
                 const {
                   name,
-                  doctorAddress,
+                  address,
                   dateOfRegistration,
                   specialization,
                   hospitalAddress,
-                  doctorRegistrationId,
-                } = doctor;
+                  registrationId,
+                  patients,
+                } = doctor
                 return (
-                  <div key={doctorAddress}>
+                  <div key={address}>
                     <DoctorProfile
-                      key={doctorAddress}
+                      key={address}
                       name={name}
-                      doctorAddress={doctorAddress}
+                      address={address}
                       dateOfRegistration={dateOfRegistration}
                       specialization={specialization}
                       hospitalAddress={hospitalAddress}
-                      doctorRegistrationId={doctorRegistrationId}
+                      registrationId={registrationId}
+                      patients={patients}
                     />
                   </div>
-                );
+                )
               }
             })
           ) : (
@@ -104,7 +135,7 @@ export default function DoctorDashboard() {
         </>
       )}
     </>
-  );
+  )
 }
 
 /* 1. registered doctors can view their details. 

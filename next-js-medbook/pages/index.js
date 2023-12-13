@@ -45,7 +45,7 @@ export default function Home() {
                 <h5 className="mb-5 text-xl font-medium text-dark">
                   Hospital Login
                 </h5>
-                <Button name="Click here" link="/loginPage"/>
+                <Button name="Click here" link="/hospitalDashboard"/>
               </div>
             </div>
 
@@ -79,7 +79,7 @@ export default function Home() {
                 <h5 className="mb-5 text-xl font-medium text-dark">
                   Patient Login & register
                 </h5>
-                <Button name="Click here" link="/loginPage"/>
+                <Button name="Click here" link="/patientDashboard"/>
               </div>
             </div>
 
